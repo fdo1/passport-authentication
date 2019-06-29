@@ -1,6 +1,15 @@
 const express = require('express');
-
 const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const db = require('./config/keys').MongoURI;
+
+// DB Config
+mongoose.connect(db, { useNewUrlParser: true })
+  .then(() => console.log('MongoDb connected...'))
+  .catch(err => console.log(err));
+
+app.use(express.static(path.join(__dirname, 'views')));
 
 const PORT = process.env.PORT || 5000;
 
