@@ -10,6 +10,8 @@ mongoose.connect(db, { useNewUrlParser: true })
   .catch(err => console.log(err));
 
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.urlencoded({ extended: false }));
+app.use('/users', require('./routes/users'));
 
 const PORT = process.env.PORT || 5000;
 
