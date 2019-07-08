@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body;
@@ -50,7 +51,8 @@ router.post('/register', (req, res) => {
               newUser.password = hash;
               newUser.save()
                 .then(user =>{
-                  res.redirect('/login');
+                  req.flash('success_msg', 'You are now registered and can log in');
+                  res.redirect('/login.html');
                 })
                 .catch(err => console.log('Error when saving User: ', err));
             })
@@ -58,6 +60,15 @@ router.post('/register', (req, res) => {
         }
       });
   }
+})
+
+// Login Handle
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/welcome.html',
+    failureRedirect: '/login.html',
+    failureFlash: true
+  })(req, res, next);
 })
 
 module.exports = router;
